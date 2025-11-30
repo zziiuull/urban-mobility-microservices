@@ -33,7 +33,7 @@ public class RideController {
     public ResponseEntity<Void> cancelRide(@PathVariable UUID rideId,
                                            @RequestParam UUID passengerId) {
         rideService.cancelRide(rideId, passengerId);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
