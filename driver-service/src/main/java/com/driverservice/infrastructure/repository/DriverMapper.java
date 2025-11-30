@@ -6,11 +6,11 @@ import com.driverservice.domain.vo.Location;
 public class DriverMapper {
     public static Driver toDomain(DriverEntity entity) {
         return new Driver(
-                entity.id(),
-                entity.name(),
-                entity.rating(),
-                entity.available(),
-                new Location(entity.latitude(), entity.longitude())
+                entity.getId(),
+                entity.getName(),
+                entity.getRating(),
+                entity.isAvailable(),
+                new Location(entity.getLatitude(), entity.getLongitude())
         );
     }
 

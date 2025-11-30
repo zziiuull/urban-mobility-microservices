@@ -15,6 +15,10 @@ public class Driver {
 
     }
 
+   public Driver(UUID id) {
+        this.id = id;
+    }
+
     public Driver(String name, double rating, boolean available, Location currentLocation) {
         this.id = UUID.randomUUID();
         this.name = name;

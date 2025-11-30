@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(PassengerNotFound.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(PassengerNotFound e) {
+    @ExceptionHandler(PassengerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(PassengerNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
 }
