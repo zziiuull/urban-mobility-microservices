@@ -1,4 +1,4 @@
-package com.driverservice.presentation.controller.events;
+package com.driverservice.application.service.events;
 
 import java.util.UUID;
 

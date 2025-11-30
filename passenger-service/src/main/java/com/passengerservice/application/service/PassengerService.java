@@ -3,6 +3,7 @@ package com.passengerservice.application.service;
 import com.passengerservice.application.service.params.CreatePassengerParam;
 import com.passengerservice.domain.entity.Passenger;
 import com.passengerservice.infrastructure.repository.PassengerEntity;
+import com.passengerservice.infrastructure.repository.PassengerMapper;
 import com.passengerservice.infrastructure.repository.PassengerRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class PassengerService {
     public UUID createPassenger(CreatePassengerParam params) {
         Passenger passenger = new Passenger(params.name());
 
-        var newPassenger = new PassengerEntity(passenger.getId(), passenger.getName());
+        var newPassenger = PassengerMapper.toEntity(passenger);
         passengerRepository.save(newPassenger);
 
         return passenger.getId();
@@ -29,6 +30,6 @@ public class PassengerService {
     public Optional<Passenger> findPassenger(UUID id) {
         var passenger = passengerRepository.findById(id);
 
-        return passenger.map(passengerEntity -> new Passenger(passengerEntity.id(), passengerEntity.name()));
+        return passenger.map(PassengerMapper::toDomain);
     }
 }
