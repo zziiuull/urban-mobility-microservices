@@ -2,13 +2,11 @@ package com.passengerservice.application.service;
 
 import com.passengerservice.application.service.params.CreatePassengerParam;
 import com.passengerservice.domain.entity.Passenger;
-import com.passengerservice.infrastructure.repository.PassengerEntity;
 import com.passengerservice.infrastructure.repository.PassengerMapper;
 import com.passengerservice.infrastructure.repository.PassengerRepository;
-import com.passengerservice.presentation.controller.exceptions.PassengerNotFound;
+import com.passengerservice.presentation.controller.exceptions.PassengerNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,6 +29,6 @@ public class PassengerService {
     public Passenger findPassenger(UUID id) {
         var passenger = passengerRepository.findById(id);
 
-        return passenger.map(PassengerMapper::toDomain).orElseThrow(() -> new PassengerNotFound("Passenger not found"));
+        return passenger.map(PassengerMapper::toDomain).orElseThrow(() -> new PassengerNotFoundException("Passenger not found"));
     }
 }

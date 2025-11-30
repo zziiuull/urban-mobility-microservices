@@ -1,4 +1,4 @@
-package com.rideservice.application.service.dto.ride.request;
+package com.rideservice.presentation.controller;
 
 import com.rideservice.domain.vo.location.Location;
 

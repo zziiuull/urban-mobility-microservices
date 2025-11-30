@@ -8,6 +8,12 @@ public class Passenger {
 
     public Passenger(){}
 
+
+
+    public Passenger(UUID id) {
+        this.id = id;
+    }
+
     public Passenger(UUID id, String name) {
         this.id = id;
         this.name = name;
