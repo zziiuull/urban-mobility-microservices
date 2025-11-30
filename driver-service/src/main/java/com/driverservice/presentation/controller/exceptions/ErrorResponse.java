@@ -1,4 +1,13 @@
 package com.driverservice.presentation.controller.exceptions;
 
-public record ErrorResponse(String message) {
+public class ErrorResponse {
+    private final String message;
+
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

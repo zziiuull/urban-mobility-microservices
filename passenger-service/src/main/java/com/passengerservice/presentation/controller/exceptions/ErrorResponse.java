@@ -1,6 +1,13 @@
 package com.passengerservice.presentation.controller.exceptions;
 
-import java.time.Instant;
+public class ErrorResponse {
+    private final String message;
 
-public record ErrorResponse(String message) {
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
