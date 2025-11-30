@@ -1,5 +1,6 @@
 package com.apigateway;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,23 +18,32 @@ public class ApiGatewayApplication {
         SpringApplication.run(ApiGatewayApplication.class, args);
     }
 
-    //TODO: verify services ports
+    @Value("${RIDE_SERVICE_URL}")
+    private String rideUrl;
+
+    @Value("${DRIVER_SERVICE_URL}")
+    private String driverUrl;
+
+    @Value("${PASSENGER_SERVICE_URL}")
+    private String passengerUrl;
+
     @Bean
     public RouterFunction<ServerResponse> customRoutes() {
+
         return
             route("ride_service")
             .route(path("/api/ride/**"), http())
-            .before(uri("http://localhost:8081"))
+            .before(uri(rideUrl))
             .build()
 
             .and(route("driver_service")
                     .route(path("/api/driver/**"), http())
-                    .before(uri("http://localhost:8082"))
+                    .before(uri(driverUrl))
                     .build())
 
             .and(route("passenger_service")
                 .route(path("/api/passenger/**"), http())
-                .before(uri("http://localhost:8083"))
+                .before(uri(passengerUrl))
                 .build());
     }
 }
