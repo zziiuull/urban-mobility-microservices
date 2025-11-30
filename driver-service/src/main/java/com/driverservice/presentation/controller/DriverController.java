@@ -10,6 +10,7 @@ import com.driverservice.domain.entity.Driver;
 import com.driverservice.domain.vo.Location;
 import com.driverservice.presentation.controller.requests.CreateDriverRequest;
 import com.driverservice.presentation.controller.requests.UpdateDriverLocationRequest;
+import com.driverservice.presentation.controller.responses.GetDriverResponse;
 import com.driverservice.presentation.controller.responses.GetLocationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +40,12 @@ public class DriverController {
         return ResponseEntity.created(location).body(id);
     }
 
+    // TODO: response
     @GetMapping("/{id}")
-    public ResponseEntity<Driver> getDriver(@PathVariable UUID id) {
-        return ResponseEntity.ok(driverService.findDriver(id));
+    public ResponseEntity<GetDriverResponse> getDriver(@PathVariable UUID id) {
+        Driver driver = driverService.findDriver(id);
+        var response = new GetDriverResponse(driver.getId(), driver.getName(), driver.getRating(), driver.isAvailable(), driver.getCurrentLocation());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/location")
