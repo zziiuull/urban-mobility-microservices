@@ -26,34 +26,30 @@ services:
 
   ride-service:
     build: ./ride-service
+    deploy:
+      replicas: 3
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_CONNECT}
     depends_on:
       - kafka
-    ports:
-      - "8081:8080"
     networks:
       - backend
 
   driver-service:
     build: ./driver-service
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_CONNECT}
     depends_on:
       - kafka
-    ports:
-      - "8082:8080"
     networks:
       - backend
 
   passenger-service:
     build: ./passenger-service
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_CONNECT}
     depends_on:
       - kafka
-    ports:
-      - "8083:8080"
     networks:
       - backend
 
@@ -61,14 +57,14 @@ services:
     image: apache/kafka:latest
     container_name: kafka
     ports:
-      - "9092:9092"
+      - "${KAFKA_PORT}:${KAFKA_PORT}"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
 
-      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_LISTENERS: ${KAFKA_LISTENERS}
 
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: ${KAFKA_ADVERTISED_LISTENERS}
 
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
