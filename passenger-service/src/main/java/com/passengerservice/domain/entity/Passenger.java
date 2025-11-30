@@ -1,4 +1,4 @@
-package com.passengerservice.domain.model.entity;
+package com.passengerservice.domain.entity;
 
 import java.util.Objects;
 import java.util.UUID;

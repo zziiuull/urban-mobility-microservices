@@ -1,6 +1,4 @@
 package com.passengerservice.application.service.params;
 
-public record CreatePassengerParam(
-        String name
-) {
+public record CreatePassengerParam(String name) {
 }
