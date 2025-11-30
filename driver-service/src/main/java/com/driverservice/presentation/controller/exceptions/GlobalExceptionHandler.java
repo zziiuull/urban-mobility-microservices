@@ -11,4 +11,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFound(DriverNotFound e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
+
+    @ExceptionHandler(IllegalLocation.class)
+    public ResponseEntity<ErrorResponse> handleIllegalLocation(IllegalLocation e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+    }
 }
