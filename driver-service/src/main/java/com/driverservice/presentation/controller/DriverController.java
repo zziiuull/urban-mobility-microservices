@@ -1,18 +1,17 @@
 package com.driverservice.presentation.controller;
 
+import com.driverservice.application.service.AcceptRideService;
 import com.driverservice.application.service.DriverLocationService;
 import com.driverservice.application.service.DriverService;
 import com.driverservice.application.service.params.CreateDriverParams;
 import com.driverservice.application.service.params.UpdateDriverLocationParams;
 import com.driverservice.domain.entity.Driver;
 import com.driverservice.domain.vo.Location;
-import com.driverservice.presentation.controller.events.DriverAcceptedRideEvent;
 import com.driverservice.presentation.controller.requests.CreateDriverRequest;
 import com.driverservice.presentation.controller.requests.UpdateDriverLocationRequest;
 import com.driverservice.presentation.controller.responses.GetLocationResponse;
-import com.driverservice.presentation.controller.responses.RideAcceptanceResponse;
+import com.driverservice.application.service.params.RideAcceptanceParams;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,12 +22,12 @@ import java.util.UUID;
 public class DriverController {
     private final DriverService driverService;
     private final DriverLocationService driverLocationService;
-    private final KafkaTemplate<String, DriverAcceptedRideEvent> kafkaTemplate;
+    private final AcceptRideService acceptRideService;
 
-    public DriverController(DriverService driverService, DriverLocationService driverLocationService, KafkaTemplate<String, DriverAcceptedRideEvent> kafkaTemplate) {
+    public DriverController(DriverService driverService, DriverLocationService driverLocationService, AcceptRideService acceptRideService) {
         this.driverService = driverService;
-        this.kafkaTemplate = kafkaTemplate;
         this.driverLocationService = driverLocationService;
+        this.acceptRideService = acceptRideService;
     }
 
     @PostMapping
@@ -69,16 +68,12 @@ public class DriverController {
     }
 
     @PostMapping("/{driverId}/accept")
-    public ResponseEntity<RideAcceptanceResponse> acceptRide(@PathVariable UUID driverId, @RequestParam UUID rideId) {
-        var optionalDriver = driverService.findDriver(driverId);
-        if (optionalDriver.isEmpty()) return ResponseEntity.notFound().build();
+    public ResponseEntity<RideAcceptanceParams> acceptRide(@PathVariable UUID driverId, @RequestParam UUID rideId) {
+        RideAcceptanceParams params = new RideAcceptanceParams(rideId, driverId);
+        var driver = acceptRideService.accept(params);
 
-        Driver driver = optionalDriver.get();
+        if (driver.isEmpty()) return ResponseEntity.notFound().build();
 
-        DriverAcceptedRideEvent event = new DriverAcceptedRideEvent(rideId, driver.getId());
-        kafkaTemplate.send("driver-accepted-ride-topic", event);
-
-        RideAcceptanceResponse response = new RideAcceptanceResponse(rideId, driver.getId());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().build();
     }
 }
