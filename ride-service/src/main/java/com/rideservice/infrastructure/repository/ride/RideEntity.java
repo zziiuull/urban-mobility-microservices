@@ -1,12 +1,11 @@
 package com.rideservice.infrastructure.repository.ride;
 
 import com.rideservice.domain.enums.RideStatus;
-import com.rideservice.domain.vo.location.Location;
-import com.rideservice.domain.vo.price.Price;
+import com.rideservice.infrastructure.repository.ride.vo.LocationEntity;
+import com.rideservice.infrastructure.repository.ride.vo.PriceEntity;
 import jakarta.persistence.*;
 
 import java.util.UUID;
-
 
 @Entity
 @Table(name = "rides")
@@ -17,35 +16,35 @@ public class RideEntity {
     @Column(nullable = false)
     private UUID passengerId;
 
-    @Column(nullable = false)
     private UUID driverId;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "latitude", column = @Column(name = "origin_latitude")),
-            @AttributeOverride(name = "longitude", column = @Column(name = "origin_longitude"))
+            @AttributeOverride(name = "amount", column = @Column(name = "price_amount")),
+            @AttributeOverride(name = "origin.latitude", column = @Column(name = "price_origin_latitude")),
+            @AttributeOverride(name = "origin.longitude", column = @Column(name = "price_origin_longitude")),
+            @AttributeOverride(name = "destination.latitude", column = @Column(name = "price_destination_latitude")),
+            @AttributeOverride(name = "destination.longitude", column = @Column(name = "price_destination_longitude"))
     })
-    private Location origin;
+    private PriceEntity price;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "latitude", column = @Column(name = "destination_latitude")),
-            @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude"))
-    })
-    private Location destination;
+    @AttributeOverrides({@AttributeOverride(name = "latitude", column = @Column(name = "origin_latitude")), @AttributeOverride(name = "longitude", column = @Column(name = "origin_longitude"))})
+    private LocationEntity origin;
+
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name = "latitude", column = @Column(name = "destination_latitude")), @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude"))})
+    private LocationEntity destination;
 
     private int travelTime;
-
-    @Embedded
-    private Price price;
 
     @Enumerated(EnumType.STRING)
     private RideStatus rideStatus;
 
-    public RideEntity() {}
+    public RideEntity() {
+    }
 
-
-    public RideEntity(UUID id, UUID passengerId, UUID driverId, Location origin, Location destination, int travelTime, Price price, RideStatus rideStatus) {
+    public RideEntity(UUID id, UUID passengerId, UUID driverId, LocationEntity origin, LocationEntity destination, int travelTime, PriceEntity price, RideStatus rideStatus) {
         this.id = id;
         this.passengerId = passengerId;
         this.driverId = driverId;
@@ -55,7 +54,6 @@ public class RideEntity {
         this.price = price;
         this.rideStatus = rideStatus;
     }
-
 
     public UUID getId() {
         return id;
@@ -81,19 +79,19 @@ public class RideEntity {
         this.driverId = driverId;
     }
 
-    public Location getOrigin() {
+    public LocationEntity getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Location origin) {
+    public void setOrigin(LocationEntity origin) {
         this.origin = origin;
     }
 
-    public Location getDestination() {
+    public LocationEntity getDestination() {
         return destination;
     }
 
-    public void setDestination(Location destination) {
+    public void setDestination(LocationEntity destination) {
         this.destination = destination;
     }
 
@@ -105,11 +103,11 @@ public class RideEntity {
         this.travelTime = travelTime;
     }
 
-    public Price getPrice() {
+    public PriceEntity getPrice() {
         return price;
     }
 
-    public void setPrice(Price price) {
+    public void setPrice(PriceEntity price) {
         this.price = price;
     }
 
@@ -120,6 +118,4 @@ public class RideEntity {
     public void setRideStatus(RideStatus rideStatus) {
         this.rideStatus = rideStatus;
     }
-
 }
-

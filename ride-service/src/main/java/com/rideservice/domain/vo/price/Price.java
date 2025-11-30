@@ -20,5 +20,4 @@ public record Price(BigDecimal amount, Location origin, Location destination) {
 
         return new Price(this.amount.add(other.amount), this.origin, this.destination);
     }
-
 }
