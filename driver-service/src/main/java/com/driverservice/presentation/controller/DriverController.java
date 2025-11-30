@@ -4,13 +4,13 @@ import com.driverservice.application.service.AcceptRideService;
 import com.driverservice.application.service.DriverLocationService;
 import com.driverservice.application.service.DriverService;
 import com.driverservice.application.service.params.CreateDriverParams;
+import com.driverservice.application.service.params.RideAcceptanceParams;
 import com.driverservice.application.service.params.UpdateDriverLocationParams;
 import com.driverservice.domain.entity.Driver;
 import com.driverservice.domain.vo.Location;
 import com.driverservice.presentation.controller.requests.CreateDriverRequest;
 import com.driverservice.presentation.controller.requests.UpdateDriverLocationRequest;
 import com.driverservice.presentation.controller.responses.GetLocationResponse;
-import com.driverservice.application.service.params.RideAcceptanceParams;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,28 +41,21 @@ public class DriverController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Driver> getDriver(@PathVariable UUID id) {
-        return driverService.findDriver(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(driverService.findDriver(id));
     }
 
     @PutMapping("/{id}/location")
     public ResponseEntity<Void> updateLocation(@PathVariable UUID id, @RequestBody UpdateDriverLocationRequest request) {
         var params = new UpdateDriverLocationParams(id, request.latitude(), request.longitude());
-        var driver = driverLocationService.updateLocation(params);
-
-        if (driver.isEmpty()) return ResponseEntity.notFound().build();
+        driverLocationService.updateLocation(params);
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/location")
     public ResponseEntity<GetLocationResponse> getLocation(@PathVariable UUID id) {
-        var driverLocation = driverLocationService.getLocation(id);
+        var location = driverLocationService.getLocation(id);
 
-        if (driverLocation.isEmpty()) return ResponseEntity.notFound().build();
-
-        Location location = driverLocation.get();
         var response = new GetLocationResponse(location.latitude(), location.longitude());
         return ResponseEntity.ok(response);
     }
@@ -70,9 +63,7 @@ public class DriverController {
     @PostMapping("/{driverId}/accept")
     public ResponseEntity<RideAcceptanceParams> acceptRide(@PathVariable UUID driverId, @RequestParam UUID rideId) {
         RideAcceptanceParams params = new RideAcceptanceParams(rideId, driverId);
-        var driver = acceptRideService.accept(params);
-
-        if (driver.isEmpty()) return ResponseEntity.notFound().build();
+        acceptRideService.accept(params);
 
         return ResponseEntity.ok().build();
     }

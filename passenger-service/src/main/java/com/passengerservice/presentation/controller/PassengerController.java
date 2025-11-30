@@ -30,8 +30,6 @@ public class PassengerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Passenger> getPassenger(@PathVariable UUID id) {
-        return passengerService.findPassenger(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(passengerService.findPassenger(id));
     }
 }

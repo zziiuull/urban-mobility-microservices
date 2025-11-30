@@ -5,10 +5,9 @@ import com.driverservice.application.service.params.RideAcceptanceParams;
 import com.driverservice.domain.entity.Driver;
 import com.driverservice.infrastructure.repository.DriverMapper;
 import com.driverservice.infrastructure.repository.DriverRepository;
+import com.driverservice.presentation.controller.exceptions.DriverNotFound;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AcceptRideService {
@@ -20,14 +19,13 @@ public class AcceptRideService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public Optional<Driver> accept(RideAcceptanceParams params) {
+    public Driver accept(RideAcceptanceParams params) {
         var driverEntity = driverRepository.findById(params.driverId());
-        if (driverEntity.isEmpty()) return Optional.empty();
+        var driver = driverEntity.map(DriverMapper::toDomain).orElseThrow(() -> new DriverNotFound("Driver not found"));
 
         DriverAcceptedRideEvent event = new DriverAcceptedRideEvent(params.rideId(), params.driverId());
         kafkaTemplate.send("driver-accepted-ride-topic", event);
 
-        var driver = driverEntity.get();
-        return Optional.of(DriverMapper.toDomain(driver));
+        return driver;
     }
 }

@@ -13,14 +13,14 @@ import java.util.UUID;
 public class DriverLocationService {
     // TODO: key
     @CachePut(cacheNames = "driverLocation", key = "#params")
-    public Optional<Location> updateLocation(UpdateDriverLocationParams params) {
+    public Location updateLocation(UpdateDriverLocationParams params) {
         // TODO: put location in database
-        return Optional.empty();
+        return null;
     }
 
     @Cacheable(cacheNames = "driverLocation", key = "#driverId")
-    public Optional<Location> getLocation(UUID driverId) {
+    public Location getLocation(UUID driverId) {
         // TODO: get location from database
-        return Optional.empty();
+        return null;
     }
 }

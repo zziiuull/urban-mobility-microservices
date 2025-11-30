@@ -5,6 +5,7 @@ import com.passengerservice.domain.entity.Passenger;
 import com.passengerservice.infrastructure.repository.PassengerEntity;
 import com.passengerservice.infrastructure.repository.PassengerMapper;
 import com.passengerservice.infrastructure.repository.PassengerRepository;
+import com.passengerservice.presentation.controller.exceptions.PassengerNotFound;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,9 +28,9 @@ public class PassengerService {
         return passenger.getId();
     }
 
-    public Optional<Passenger> findPassenger(UUID id) {
+    public Passenger findPassenger(UUID id) {
         var passenger = passengerRepository.findById(id);
 
-        return passenger.map(PassengerMapper::toDomain);
+        return passenger.map(PassengerMapper::toDomain).orElseThrow(() -> new PassengerNotFound("Passenger not found"));
     }
 }
