@@ -1,15 +1,21 @@
 package com.driverservice.presentation.controller;
 
-import com.driverservice.application.service.driver.DriverLocationService;
-import com.driverservice.application.service.driver.DriverService;
-import com.driverservice.application.service.dto.driver.DriverAcceptedRideEvent;
-import com.driverservice.application.service.dto.driver.RideAcceptanceResponse;
-import com.driverservice.domain.model.entity.driver.Driver;
-import com.driverservice.domain.vo.location.Location;
+import com.driverservice.application.service.DriverLocationService;
+import com.driverservice.application.service.DriverService;
+import com.driverservice.application.service.params.CreateDriverParams;
+import com.driverservice.application.service.params.UpdateDriverLocationParams;
+import com.driverservice.domain.entity.Driver;
+import com.driverservice.domain.vo.Location;
+import com.driverservice.presentation.controller.events.DriverAcceptedRideEvent;
+import com.driverservice.presentation.controller.requests.CreateDriverRequest;
+import com.driverservice.presentation.controller.requests.UpdateDriverLocationRequest;
+import com.driverservice.presentation.controller.responses.GetLocationResponse;
+import com.driverservice.presentation.controller.responses.RideAcceptanceResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -26,54 +32,53 @@ public class DriverController {
     }
 
     @PostMapping
-    public ResponseEntity<Driver> createDriver(@RequestBody Driver driver) {
-        Driver created = driverService.registerDriver(driver);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<UUID> createDriver(@RequestBody CreateDriverRequest request) {
+        var params = new CreateDriverParams(request.name(), request.latitude(), request.longitude());
+        UUID id = driverService.registerDriver(params);
+
+        URI location = URI.create("/api/driver/" + id);
+        return ResponseEntity.created(location).body(id);
     }
 
     @GetMapping("/{id}")
-    public Driver getDriver(@PathVariable UUID id) {
+    public ResponseEntity<Driver> getDriver(@PathVariable UUID id) {
         return driverService.findDriver(id)
-                .orElseThrow(() -> new RuntimeException("Driver not found"));
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     @PutMapping("/{id}/location")
-    public Driver updateLocation(@PathVariable UUID id, @RequestBody Location location) {
-        Driver driver = driverService.findDriver(id)
-                .orElseThrow(() -> new RuntimeException("Driver not found"));
+    public ResponseEntity<Void> updateLocation(@PathVariable UUID id, @RequestBody UpdateDriverLocationRequest request) {
+        var params = new UpdateDriverLocationParams(id, request.latitude(), request.longitude());
+        var driver = driverLocationService.updateLocation(params);
 
-        driver.setCurrentLocation(location);
-        driverService.registerDriver(driver);
+        if (driver.isEmpty()) return ResponseEntity.notFound().build();
 
-        driverLocationService.updateLocation(id, location);
-
-        return driver;
-
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/location")
-    public Location getLocation(@PathVariable UUID id) {
-        Location location = driverLocationService.getLocation(id);
-        if (location != null) return location;
+    public ResponseEntity<GetLocationResponse> getLocation(@PathVariable UUID id) {
+        var driverLocation = driverLocationService.getLocation(id);
 
-        Driver driver = driverService.findDriver(id)
-                .orElseThrow(() -> new RuntimeException("Driver not found"));
-        return driver.getCurrentLocation();
+        if (driverLocation.isEmpty()) return ResponseEntity.notFound().build();
+
+        Location location = driverLocation.get();
+        var response = new GetLocationResponse(location.latitude(), location.longitude());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{driverId}/accept")
     public ResponseEntity<RideAcceptanceResponse> acceptRide(@PathVariable UUID driverId, @RequestParam UUID rideId) {
-        Driver driver = driverService.findDriver(driverId)
-                .orElseThrow(() -> new RuntimeException("Driver not found"));
+        var optionalDriver = driverService.findDriver(driverId);
+        if (optionalDriver.isEmpty()) return ResponseEntity.notFound().build();
 
-        DriverAcceptedRideEvent event =
-                new DriverAcceptedRideEvent(rideId, driver.getId());
+        Driver driver = optionalDriver.get();
+
+        DriverAcceptedRideEvent event = new DriverAcceptedRideEvent(rideId, driver.getId());
         kafkaTemplate.send("driver-accepted-ride-topic", event);
 
-        RideAcceptanceResponse response =
-                new RideAcceptanceResponse(rideId, driver.getId());
-
+        RideAcceptanceResponse response = new RideAcceptanceResponse(rideId, driver.getId());
         return ResponseEntity.ok(response);
     }
 }

@@ -1,26 +1,42 @@
-package com.driverservice.domain.model.entity.driver;
+package com.driverservice.domain.entity;
 
-import com.driverservice.domain.vo.location.Location;
+import com.driverservice.domain.vo.Location;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Driver {
-    private UUID id;
+    private final UUID id;
     private String name;
     private double rating;
     private boolean available;
     Location currentLocation;
 
-    public Driver() {
-
+    public Driver(String name, Location currentLocation) {
+        this.id = java.util.UUID.randomUUID();
+        this.name = name;
+        this.rating = 0;
+        this.available = true;
+        this.currentLocation = currentLocation;
     }
 
-    public Driver(String name, double rating, boolean available, Location currentLocation) {
-        this.id = UUID.randomUUID();
+    public Driver(UUID id, String name, double rating, boolean available, Location currentLocation) {
+        this.id = id;
         this.name = name;
         this.rating = rating;
         this.available = available;
         this.currentLocation = currentLocation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Driver driver)) return false;
+        return Objects.equals(id, driver.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     public UUID getId() {
