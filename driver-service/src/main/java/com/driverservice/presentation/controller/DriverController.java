@@ -7,7 +7,6 @@ import com.driverservice.application.service.params.CreateDriverParams;
 import com.driverservice.application.service.params.RideAcceptanceParams;
 import com.driverservice.application.service.params.UpdateDriverLocationParams;
 import com.driverservice.domain.entity.Driver;
-import com.driverservice.domain.vo.Location;
 import com.driverservice.presentation.controller.requests.CreateDriverRequest;
 import com.driverservice.presentation.controller.requests.UpdateDriverLocationRequest;
 import com.driverservice.presentation.controller.responses.GetDriverResponse;
@@ -19,7 +18,7 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping
+@RequestMapping("/v1")
 public class DriverController {
     private final DriverService driverService;
     private final DriverLocationService driverLocationService;
@@ -40,7 +39,6 @@ public class DriverController {
         return ResponseEntity.created(location).body(id);
     }
 
-    // TODO: response
     @GetMapping("/{id}")
     public ResponseEntity<GetDriverResponse> getDriver(@PathVariable UUID id) {
         Driver driver = driverService.findDriver(id);

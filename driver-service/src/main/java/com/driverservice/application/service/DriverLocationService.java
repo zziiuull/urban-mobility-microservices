@@ -2,25 +2,34 @@ package com.driverservice.application.service;
 
 import com.driverservice.application.service.params.UpdateDriverLocationParams;
 import com.driverservice.domain.vo.Location;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import com.driverservice.infrastructure.repository.DriverRepository;
+import com.driverservice.presentation.controller.exceptions.DriverNotFound;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class DriverLocationService {
-    // TODO: key
-    @CachePut(cacheNames = "driverLocation", key = "#params")
-    public Location updateLocation(UpdateDriverLocationParams params) {
-        // TODO: put location in database
-        return null;
+    private final DriverRepository repository;
+
+    public DriverLocationService(DriverRepository repository) {
+        this.repository = repository;
     }
 
-    @Cacheable(cacheNames = "driverLocation", key = "#driverId")
+    public void updateLocation(UpdateDriverLocationParams params) {
+        var driver = repository.findById(params.id())
+                .orElseThrow(() -> new DriverNotFound("Driver not found"));
+
+        driver.setLatitude(params.latitude());
+        driver.setLongitude(params.longitude());
+
+        repository.save(driver);
+    }
+
     public Location getLocation(UUID driverId) {
-        // TODO: get location from database
-        return null;
+        var driver = repository.findById(driverId)
+                .orElseThrow(() -> new DriverNotFound("Driver not found"));
+
+        return new Location(driver.getLatitude(), driver.getLongitude());
     }
 }
