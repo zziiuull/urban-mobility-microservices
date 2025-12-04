@@ -1,0 +1,11 @@
+C:\Users\thiag\RiderProjects\Mobility\Contracts\bin\Debug\net8.0\Contracts.deps.json
+C:\Users\thiag\RiderProjects\Mobility\Contracts\bin\Debug\net8.0\Contracts.dll
+C:\Users\thiag\RiderProjects\Mobility\Contracts\bin\Debug\net8.0\Contracts.pdb
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\Contracts.AssemblyInfoInputs.cache
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\Contracts.AssemblyInfo.cs
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\Contracts.csproj.CoreCompileInputs.cache
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\Contracts.dll
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\refint\Contracts.dll
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\Contracts.pdb
+C:\Users\thiag\RiderProjects\Mobility\Contracts\obj\Debug\net8.0\ref\Contracts.dll

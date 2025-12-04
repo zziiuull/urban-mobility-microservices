@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Q44AoQKH85mJbuioaYCRQo87nihFwvc0BBgN/vJRgsU=",
+  "Source": "price-service",
+  "BasePath": "_content/price-service",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
