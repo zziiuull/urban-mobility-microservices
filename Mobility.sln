@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "price-service", "price-service\price-service.csproj", "{C8AE1F2F-5F54-4367-81FA-EB43D4A2A875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "notification-service", "notification-service\notification-service.csproj", "{98FB497E-97EF-4EC5-BA5F-1BC6915C658F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{EC07FCA4-047A-48CD-A902-C89E77DB8ECE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8AE1F2F-5F54-4367-81FA-EB43D4A2A875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8AE1F2F-5F54-4367-81FA-EB43D4A2A875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8AE1F2F-5F54-4367-81FA-EB43D4A2A875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8AE1F2F-5F54-4367-81FA-EB43D4A2A875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98FB497E-97EF-4EC5-BA5F-1BC6915C658F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98FB497E-97EF-4EC5-BA5F-1BC6915C658F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98FB497E-97EF-4EC5-BA5F-1BC6915C658F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98FB497E-97EF-4EC5-BA5F-1BC6915C658F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC07FCA4-047A-48CD-A902-C89E77DB8ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC07FCA4-047A-48CD-A902-C89E77DB8ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC07FCA4-047A-48CD-A902-C89E77DB8ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC07FCA4-047A-48CD-A902-C89E77DB8ECE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
