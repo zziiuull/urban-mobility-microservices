@@ -21,15 +21,15 @@ public class PaymentMapper {
 
     public static Payment toDomain(PaymentEntity entity) {
         return new Payment(
-                entity.id(),
-                entity.rideId(),
-                entity.passengerId(),
-                entity.amountPaid(),
-                entity.totalAmount(),
-                entity.change(),
-                PaymentStatus.valueOf(entity.status()),
-                PaymentMethod.valueOf(entity.method()),
-                entity.createdAt()
+                entity.getId(),
+                entity.getRideId(),
+                entity.getPassengerId(),
+                entity.getAmountPaid(),
+                entity.getTotalAmount(),
+                entity.getChange(),
+                PaymentStatus.valueOf(entity.getStatus()),
+                PaymentMethod.valueOf(entity.getMethod()),
+                entity.getCreatedAt()
         );
     }
 }
