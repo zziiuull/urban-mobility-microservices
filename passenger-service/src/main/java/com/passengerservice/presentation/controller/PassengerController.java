@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/passenger")
+@RequestMapping
 public class PassengerController {
     private final PassengerService passengerService;
 

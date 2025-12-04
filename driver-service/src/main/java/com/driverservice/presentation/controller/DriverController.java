@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/driver")
+@RequestMapping
 public class DriverController {
     private final DriverService driverService;
     private final DriverLocationService driverLocationService;

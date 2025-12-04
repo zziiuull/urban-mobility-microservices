@@ -7,17 +7,6 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - api-gateway
-    networks:
-      - backend
-
-  api-gateway:
-    build: ./api-gateway
-    environment:
-      RIDE_SERVICE_URL: ${RIDE_SERVICE_URL}
-      DRIVER_SERVICE_URL: ${DRIVER_SERVICE_URL}
-      PASSENGER_SERVICE_URL: ${PASSENGER_SERVICE_URL}
-    depends_on:
       - ride-service
       - driver-service
       - passenger-service
@@ -26,8 +15,6 @@ services:
 
   ride-service:
     build: ./ride-service
-    deploy:
-      replicas: 3
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_CONNECT}
     depends_on:
@@ -46,6 +33,15 @@ services:
 
   passenger-service:
     build: ./passenger-service
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_CONNECT}
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  payment-service:
+    build: ./payment-service
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_CONNECT}
     depends_on:
@@ -78,23 +74,23 @@ services:
     networks:
       - backend
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    ports:
-      - "9090:9090"
-    networks:
-      - backend
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   volumes:
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #   ports:
+  #     - "9090:9090"
+  #   networks:
+  #     - backend
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    networks:
-      - backend
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - backend
 
 networks:
   backend:
