@@ -4,7 +4,7 @@ using PriceService.Services;
 namespace PriceService.Presentation;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("/v1/[controller]")]
 public class PriceController(PriceCalculator calc, CacheService cache) : ControllerBase
 {
 

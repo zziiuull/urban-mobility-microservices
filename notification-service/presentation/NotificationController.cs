@@ -4,7 +4,7 @@ using NotificationService.WebSockets;
 namespace NotificationService.Presentation;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("/v1/[controller]")]
 public class NotificationController(NotificationHub hub) : ControllerBase
 {
     [HttpGet("health")]

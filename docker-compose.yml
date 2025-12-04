@@ -49,6 +49,37 @@ services:
     networks:
       - backend
 
+  price-service:
+    build: ./price-service
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      Kafka__BootstrapServers: kafka:9092
+      Redis__Connection: redis:6379,abortConnect=false
+      Redis__DefaultTtlSeconds: "90"
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - backend
+
+  notification-service:
+    build: ./notification-service
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      Kafka__BootstrapServers: kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
   kafka:
     image: apache/kafka:latest
     container_name: kafka
