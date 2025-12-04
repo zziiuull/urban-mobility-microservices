@@ -50,7 +50,7 @@ services:
       - backend
 
   price-service:
-    build: ./price-service
+    build: ./PriceService
     environment:
       ASPNETCORE_URLS: http://+:8080
       Kafka__BootstrapServers: kafka:9092
@@ -63,7 +63,7 @@ services:
       - backend
 
   notification-service:
-    build: ./notification-service
+    build: ./NotificationService
     environment:
       ASPNETCORE_URLS: http://+:8080
       Kafka__BootstrapServers: kafka:9092
