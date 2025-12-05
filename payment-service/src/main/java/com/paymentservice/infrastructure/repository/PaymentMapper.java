@@ -1,4 +1,4 @@
-package com.paymentservice.repository;
+package com.paymentservice.infrastructure.repository;
 
 import com.paymentservice.domain.entity.Payment;
 import com.paymentservice.domain.vo.PaymentMethod;

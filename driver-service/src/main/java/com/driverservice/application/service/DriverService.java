@@ -46,12 +46,13 @@ public class DriverService {
         return driver.map(DriverMapper::toDomain).orElseThrow(() -> new DriverNotFound("Driver not found"));
     }
 
-    // @KafkaListener(topics = "find-driver", containerFactory = "kafkaListenerContainerFactory")
-    // public void onFindDriver(FindDriverEvent event) {
-    //     UUID driverId = findNearestDriver(event.rideId()).getId();
+     @KafkaListener(topics = "find-driver", containerFactory = "findDriverKafkaListenerContainerFactory")
+     public void onFindDriver(FindDriverEvent event) {
+         UUID driverId = findNearestDriver(event.rideId()).getId();
 
-    //     kafkaTemplate.send("driver-found", new DriverFoundEvent(
-    //             event.rideId(), driverId
-    //     ));
-    // }
+         kafkaTemplate.send("driver-found", new DriverFoundEvent(
+                 event.rideId(), driverId
+
+         ));
+     }
 }

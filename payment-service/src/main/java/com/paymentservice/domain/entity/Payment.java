@@ -3,7 +3,6 @@ package com.paymentservice.domain.entity;
 import com.paymentservice.domain.vo.PaymentMethod;
 import com.paymentservice.domain.vo.PaymentStatus;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,17 +10,17 @@ public class Payment {
     private final UUID id;
     private final UUID rideId;
     private final UUID passengerId;
-    private final BigDecimal amountPaid;
-    private final BigDecimal totalAmount;
-    private final BigDecimal change;
+    private final double amountPaid;
+    private final double totalAmount;
+    private final double change;
     private final PaymentStatus status;
     private final PaymentMethod method;
 
     public Payment(
             UUID rideId,
             UUID passengerId,
-            BigDecimal amountPaid,
-            BigDecimal totalAmount,
+            double amountPaid,
+            double totalAmount,
             PaymentMethod method
     ) {
         this.id = UUID.randomUUID();
@@ -31,12 +30,12 @@ public class Payment {
         this.totalAmount = totalAmount;
         this.method = method;
 
-        if (amountPaid.compareTo(totalAmount) < 0) {
+        if (amountPaid < totalAmount) {
             this.status = PaymentStatus.FAILED;
-            this.change = BigDecimal.ZERO;
+            this.change = 0;
         } else {
             this.status = PaymentStatus.SUCCESS;
-            this.change = amountPaid.subtract(totalAmount);
+            this.change = amountPaid -totalAmount;
         }
     }
 
@@ -44,9 +43,9 @@ public class Payment {
             UUID id,
             UUID rideId,
             UUID passengerId,
-            BigDecimal amountPaid,
-            BigDecimal totalAmount,
-            BigDecimal change,
+            double amountPaid,
+            double totalAmount,
+            double change,
             PaymentStatus status,
             PaymentMethod method
     ) {
@@ -83,15 +82,15 @@ public class Payment {
         return passengerId;
     }
 
-    public BigDecimal getAmountPaid() {
+    public double getAmountPaid() {
         return amountPaid;
     }
 
-    public BigDecimal getTotalAmount() {
+    public double getTotalAmount() {
         return totalAmount;
     }
 
-    public BigDecimal getChange() {
+    public double getChange() {
         return change;
     }
 

@@ -1,9 +1,8 @@
 package com.paymentservice.application.service.events;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public record PaymentFailedEvent(
-        UUID rideId,
-        UUID passengerId
+        UUID  rideId,
+        UUID  passengerId
 ) {}

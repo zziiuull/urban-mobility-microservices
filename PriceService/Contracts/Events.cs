@@ -1,6 +1,6 @@
 ﻿namespace Contracts;
 
-public record Location(double Lat, double Lng);
+public record Location(double Latitude, double Longitude);
 
 public enum RideStatus {
     requested, driver_assigned, driver_arrived, started, completed, canceled
@@ -31,7 +31,7 @@ public record PaymentSucceeded(
 
 public record PaymentFailed(
     Guid RideId,
-    string PassengerId
+    Guid PassengerId
 );
 
 public record DriverAssigned(
@@ -52,11 +52,11 @@ public record DriverFound(
 public static class Topics
 {
     public const string RideRequested    = "ride-requested";
-    public const string PriceCalculated  = "price.calculated";
-    public const string RideStatusChanged= "ride.status-changed";
+    public const string PriceCalculated  = "price-calculated";
+    public const string RideStatusChanged= "ride-status-changed";
     public const string PaymentSucceeded = "payment-success";
     public const string PaymentFailed    = "payment-failed";
-    public const string DriverAssigned = "driver.assigned";
+    public const string DriverAssigned = "driver-assigned";
     public const string FindDriver = "find-driver";
     public const string DriverFound = "driver-found";
 }

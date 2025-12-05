@@ -1,5 +1,6 @@
 package com.rideservice.infrastructure.repository.ride;
 
+import com.rideservice.domain.model.entity.driver.Driver;
 import com.rideservice.domain.model.entity.passenger.Passenger;
 import com.rideservice.domain.model.entity.ride.Ride;
 import com.rideservice.domain.vo.location.Location;
@@ -12,7 +13,7 @@ public class RideMapper {
         return new Ride(
                 entity.getId(),
                 new Price(entity.getPrice().getAmount(), new Location(entity.getPrice().getOrigin().getLatitude(), entity.getPrice().getOrigin().getLongitude()), new Location(entity.getPrice().getDestination().getLatitude(), entity.getPrice().getDestination().getLongitude())),
-                null,
+                entity.getDriverId() != null ? new Driver(entity.getDriverId()) : null,
                 new Passenger(entity.getPassengerId()),
                 entity.getTravelTime(),
                 new Location(entity.getOrigin().getLatitude(), entity.getOrigin().getLongitude()),

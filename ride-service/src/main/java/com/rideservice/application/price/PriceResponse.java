@@ -1,14 +1,13 @@
 package com.rideservice.application.price;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
 public record PriceResponse(
         UUID rideId,
-        BigDecimal amount,
+        double amount,
         String currency,
-        BigDecimal surgeFactor,
+        double surgeFactor,
         boolean cacheHit,
         Instant calculatedAtUtc
 ) {

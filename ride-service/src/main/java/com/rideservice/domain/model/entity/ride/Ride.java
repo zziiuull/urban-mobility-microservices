@@ -21,19 +21,7 @@ public class Ride {
     RideStatus rideStatus;
 
     public Ride() {
-
     }
-
-//    public Ride(Price price, Driver driver, int travelTime, Location origin, Passenger passenger, Location destination, RideStatus rideStatus) {
-//        this.id = UUID.randomUUID();
-//        this.price = price;
-//        this.driver = driver;
-//        this.travelTime = travelTime;
-//        this.origin = origin;
-//        this.passenger = passenger;
-//        this.destination = destination;
-//        this.rideStatus = rideStatus;
-//    }
 
     public Ride(UUID id, Price price, Passenger passenger, Location origin, Location destination) {
         this.id = id;
@@ -55,10 +43,10 @@ public class Ride {
         this.rideStatus = rideStatus;
     }
 
-    public void assignDriver(Driver newDriver) {
+    public void assignDriver(UUID driverId) {
         if (driver != null) throw new DriverAlreadyAssigned("Driver already assigned for this ride");
 
-        setDriver(newDriver);
+        setDriver(new Driver(driverId));
         setRideStatus(RideStatus.DRIVER_ASSIGNED);
     }
 
@@ -68,6 +56,10 @@ public class Ride {
         }
 
         setRideStatus(RideStatus.CANCELLED);
+    }
+
+    public void pay(){
+        this.rideStatus = RideStatus.PAID;
     }
 
     public UUID getId() {

@@ -1,8 +1,8 @@
 using Confluent.Kafka;
 using StackExchange.Redis;
-using PriceService.Consumers;
+//using PriceService.Consumers;
 using PriceService.Infrastructure;
-using PriceService.Producers;
+//using PriceService.Producers;
 using PriceService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,16 +36,16 @@ builder.Services.AddSingleton(new AdminClientConfig {
     BootstrapServers = builder.Configuration["Kafka:BootstrapServers"] ?? "localhost:9092"
 });
 
-var neededTopicsPrice = new[] { "ride.requested", "price.calculated" };
-builder.Services.AddSingleton<IHostedService>(sp =>
-    new TopicBootstrapper(sp.GetRequiredService<AdminClientConfig>(), neededTopicsPrice));
+// var neededTopicsPrice = new[] { "price.calculated" };
+// builder.Services.AddSingleton<IHostedService>(sp =>
+//     new TopicBootstrapper(sp.GetRequiredService<AdminClientConfig>(), neededTopicsPrice));
 
 builder.Services.AddSingleton<CacheService>();
 builder.Services.AddSingleton<PriceCalculator>();
-builder.Services.AddSingleton<PriceProducer>();
+//builder.Services.AddSingleton<PriceProducer>();
 
 // Background Consumer
-builder.Services.AddHostedService<PriceConsumer>();
+// builder.Services.AddHostedService<PriceConsumer>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

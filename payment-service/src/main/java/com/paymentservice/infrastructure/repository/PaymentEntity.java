@@ -1,10 +1,9 @@
-package com.paymentservice.repository;
+package com.paymentservice.infrastructure.repository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -14,16 +13,16 @@ public class PaymentEntity{
     private UUID id;
     private UUID rideId;
     private UUID passengerId;
-    private BigDecimal amountPaid;
-    private BigDecimal totalAmount;
-    private BigDecimal change;
+    private double amountPaid;
+    private double totalAmount;
+    private double change;
     private String status;
     private String method;
 
     public PaymentEntity() {
     }
 
-    public PaymentEntity(UUID id, UUID rideId, UUID passengerId, BigDecimal amountPaid, BigDecimal totalAmount, BigDecimal change, String status, String method) {
+    public PaymentEntity(UUID id, UUID rideId, UUID passengerId, double amountPaid, double totalAmount, double change, String status, String method) {
         this.id = id;
         this.rideId = rideId;
         this.passengerId = passengerId;
@@ -58,27 +57,27 @@ public class PaymentEntity{
         this.passengerId = passengerId;
     }
 
-    public BigDecimal getAmountPaid() {
+    public double getAmountPaid() {
         return amountPaid;
     }
 
-    public void setAmountPaid(BigDecimal amountPaid) {
+    public void setAmountPaid(double amountPaid) {
         this.amountPaid = amountPaid;
     }
 
-    public BigDecimal getTotalAmount() {
+    public double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
+    public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public BigDecimal getChange() {
+    public double getChange() {
         return change;
     }
 
-    public void setChange(BigDecimal change) {
+    public void setChange(double change) {
         this.change = change;
     }
 

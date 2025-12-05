@@ -1,14 +1,11 @@
 package com.rideservice.application.service;
 
-import com.rideservice.application.events.DriverAssignedEvent;
-import com.rideservice.application.events.FindDriverEvent;
-import com.rideservice.application.events.PaymentSuccessEvent;
+import com.rideservice.application.events.*;
 import com.rideservice.application.price.PriceResponse;
 import com.rideservice.application.service.events.DriverAcceptedRideEvent;
 import com.rideservice.application.service.events.RideCancelledEvent;
 import com.rideservice.application.service.events.RideRequestedEvent;
 import com.rideservice.application.service.params.CreateRideParams;
-import com.rideservice.domain.model.entity.driver.Driver;
 import com.rideservice.domain.model.entity.passenger.Passenger;
 import com.rideservice.domain.model.entity.ride.Ride;
 import com.rideservice.domain.vo.price.Price;
@@ -64,6 +61,18 @@ public class RideService {
         RideEntity saved = rideRepository.save(entity);
 
         kafkaTemplate.send(
+                "price-calculated",
+                new PriceCalculatedEvent(
+                        ride.getId(),
+                        response.amount(),
+                        response.currency(),
+                        response.surgeFactor(),
+                        response.cacheHit()
+                )
+        );
+
+        kafkaTemplate.send("ride-status-changed", new RideStatusEvent(ride.getId(), ride.getRideStatus()));
+        kafkaTemplate.send(
                 "ride-requested",
                 new RideRequestedEvent(
                         ride.getId(),
@@ -83,14 +92,24 @@ public class RideService {
                 .orElseThrow(() -> new RideNotFoundException("Ride not found"));
     }
 
-    @KafkaListener(topics = "payment-success", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = "payment-success", containerFactory = "paymentSuccessKafkaListenerContainerFactory")
     public void handlePaymentSuccess(PaymentSuccessEvent event) {
+        RideEntity entity = rideRepository.findById(event.rideId())
+                .orElseThrow(() -> new RideNotFoundException("Ride not found"));
+
+        Ride ride = RideMapper.toDomain(entity);
+
+        ride.pay();
+
+        rideRepository.save(RideMapper.toEntity(ride));
+
+        kafkaTemplate.send("ride-status-changed", new RideStatusEvent(event.rideId(), ride.getRideStatus()));
         kafkaTemplate.send("find-driver", new FindDriverEvent(event.rideId()));
     }
 
     @KafkaListener(
             topics = "driver-found",
-            containerFactory = "kafkaListenerContainerFactory"
+            containerFactory = "driverAcceptedKafkaListenerContainerFactory"
     )
     public void handleDriverAcceptedRide(DriverAcceptedRideEvent event) {
         RideEntity entity = rideRepository.findById(event.rideId())
@@ -98,10 +117,11 @@ public class RideService {
 
         Ride ride = RideMapper.toDomain(entity);
 
-        ride.assignDriver(new Driver(event.driverId()));
+        ride.assignDriver(event.driverId());
 
         rideRepository.save(RideMapper.toEntity(ride));
 
+        kafkaTemplate.send("ride-status-changed", new RideStatusEvent(ride.getId(), ride.getRideStatus()));
         kafkaTemplate.send("driver-assigned", new DriverAssignedEvent(event.rideId(), event.driverId()));
     }
 

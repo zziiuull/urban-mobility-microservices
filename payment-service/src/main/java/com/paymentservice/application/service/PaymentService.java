@@ -5,8 +5,8 @@ import com.paymentservice.application.service.events.PaymentSuccessEvent;
 import com.paymentservice.application.service.params.PayParams;
 import com.paymentservice.domain.entity.Payment;
 import com.paymentservice.domain.vo.PaymentStatus;
-import com.paymentservice.repository.PaymentMapper;
-import com.paymentservice.repository.PaymentRepository;
+import com.paymentservice.infrastructure.repository.PaymentMapper;
+import com.paymentservice.infrastructure.repository.PaymentRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +30,11 @@ public class PaymentService {
         );
 
         paymentRepository.save(PaymentMapper.toEntity(payment));
+
+        System.out.println(new PaymentSuccessEvent(
+                params.rideId(),
+                payment.getChange()
+        ));
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
             kafkaTemplate.send("payment-success", new PaymentSuccessEvent(
