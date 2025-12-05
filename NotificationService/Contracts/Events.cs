@@ -18,18 +18,15 @@ public record PriceCalculated(
     decimal Amount,
     string Currency,
     decimal SurgeFactor,
-    bool CacheHit,
-    DateTime CalculatedAtUtc);
+    bool CacheHit);
 
 public record RideStatusChanged(
     Guid RideId,
-    string Status,
-    DateTime ChangedAtUtc);
+    string Status);
 
 public record PaymentSucceeded(
     Guid RideId,
-    decimal Change,
-    DateTime CreatedAt
+    decimal Change
 );
 
 public record PaymentFailed(
