@@ -1,5 +1,8 @@
 package com.rideservice.application.service;
 
+import com.rideservice.application.events.FindDriverEvent;
+import com.rideservice.application.events.PaymentSuccessEvent;
+import com.rideservice.application.price.PriceResponse;
 import com.rideservice.application.service.events.DriverAcceptedRideEvent;
 import com.rideservice.application.service.events.RideCancelledEvent;
 import com.rideservice.application.service.events.RideRequestedEvent;
@@ -12,15 +15,14 @@ import com.rideservice.infrastructure.repository.ride.RideEntity;
 import com.rideservice.infrastructure.repository.ride.RideMapper;
 import com.rideservice.infrastructure.repository.ride.RideRepository;
 import com.rideservice.presentation.controller.exception.RideNotFoundException;
-import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.UUID;
 
 @Service
-@KafkaListener(topics = "driver-accepted-ride-topic", groupId = "ride-service")
 public class RideService {
     private final RideRepository rideRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -31,11 +33,27 @@ public class RideService {
     }
 
     public Ride createRide(CreateRideParams params) {
+        WebClient client = WebClient.create("http://price-service:8080");
+        PriceResponse response = client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/v1/Price")
+                        .queryParam("oLat", params.origin().latitude())
+                        .queryParam("oLng", params.origin().longitude())
+                        .queryParam("dLat", params.destination().latitude())
+                        .queryParam("dLng", params.destination().longitude())
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(PriceResponse.class)
+                .block();
+
+        if (response == null) return null;
+
         Ride ride = new Ride(
                 new Price(
-                    java.math.BigDecimal.valueOf(20.0),
-                    params.origin(),
-                    params.destination()),
+                        response.amount(),
+                        params.origin(),
+                        params.destination()),
                 new Passenger(params.passengerId()),
                 params.origin(),
                 params.destination());
@@ -63,8 +81,16 @@ public class RideService {
                 .orElseThrow(() -> new RideNotFoundException("Ride not found"));
     }
 
-    @KafkaHandler
-    public void handleDriverAcceptedRide(DriverAcceptedRideEvent event){
+    @KafkaListener(topics = "payment-success", containerFactory = "kafkaListenerContainerFactory")
+    public void handlePaymentSuccess(PaymentSuccessEvent event) {
+        kafkaTemplate.send("find-driver", new FindDriverEvent(event.rideId()));
+    }
+
+    @KafkaListener(
+            topics = "driver-found",
+            containerFactory = "kafkaListenerContainerFactory"
+    )
+    public void handleDriverAcceptedRide(DriverAcceptedRideEvent event) {
         RideEntity entity = rideRepository.findById(event.rideId())
                 .orElseThrow(() -> new RideNotFoundException("Ride not found"));
 
