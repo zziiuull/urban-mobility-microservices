@@ -11,7 +11,7 @@ public record RideRequested(
     string PassengerId,
     Location Origin,
     Location Destination,
-    DateTime RequestedAtUtc);
+    decimal Amount);
 
 public record PriceCalculated(
     Guid RideId,
@@ -27,33 +27,39 @@ public record RideStatusChanged(
     DateTime ChangedAtUtc);
 
 public record PaymentSucceeded(
-    Guid RideId, 
-    Guid PaymentId,
-    decimal Amount,
-    string Currency,
-    DateTime AtUtc
+    Guid RideId,
+    decimal Change,
+    DateTime CreatedAt
 );
 
 public record PaymentFailed(
     Guid RideId, 
-    string PassengerId,
-    string Reason, 
-    DateTime AtUtc
+    string PassengerId
 );
 
 public record DriverAssigned(
     Guid RideId,
-    Guid DriverId,
-    int EtaMinutes,
-    DateTime AssignedAtUtc
+    Guid DriverId
 );
+
+public record FindDriver(
+    Guid RideId
+);
+
+public record DriverFound(
+    Guid RideId,
+    Guid DriverId
+);
+
 
 public static class Topics
 {
-    public const string RideRequested    = "ride.requested";
+    public const string RideRequested    = "ride-requested";
     public const string PriceCalculated  = "price.calculated";
     public const string RideStatusChanged= "ride.status-changed";
-    public const string PaymentSucceeded = "payment.succeeded";
-    public const string PaymentFailed    = "payment.failed";
+    public const string PaymentSucceeded = "payment-success";
+    public const string PaymentFailed    = "payment-failed";
     public const string DriverAssigned = "driver.assigned";
+    public const string FindDriver = "find-driver";
+    public const string DriverFound = "driver-found";
 }

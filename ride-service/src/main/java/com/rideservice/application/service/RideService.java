@@ -1,5 +1,6 @@
 package com.rideservice.application.service;
 
+import com.rideservice.application.events.DriverAssignedEvent;
 import com.rideservice.application.events.FindDriverEvent;
 import com.rideservice.application.events.PaymentSuccessEvent;
 import com.rideservice.application.price.PriceResponse;
@@ -50,6 +51,7 @@ public class RideService {
         if (response == null) return null;
 
         Ride ride = new Ride(
+                params.passengerId(),
                 new Price(
                         response.amount(),
                         params.origin(),
@@ -62,7 +64,7 @@ public class RideService {
         RideEntity saved = rideRepository.save(entity);
 
         kafkaTemplate.send(
-                "ride-requested-topic",
+                "ride-requested",
                 new RideRequestedEvent(
                         ride.getId(),
                         params.passengerId(),
@@ -99,6 +101,8 @@ public class RideService {
         ride.assignDriver(new Driver(event.driverId()));
 
         rideRepository.save(RideMapper.toEntity(ride));
+
+        kafkaTemplate.send("driver-assigned", new DriverAssignedEvent(event.rideId(), event.driverId()));
     }
 
     public void cancelRide(UUID rideId, UUID passengerId) {

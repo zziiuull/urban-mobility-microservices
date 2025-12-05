@@ -18,7 +18,7 @@ builder.Services.AddSingleton(new ConsumerConfig {
 builder.Services.AddSingleton(new AdminClientConfig {
     BootstrapServers = builder.Configuration["Kafka:BootstrapServers"] ?? "localhost:9092"
 });
-var neededTopics = new[] { Topics.PriceCalculated, Topics.RideStatusChanged, Topics.PaymentSucceeded, Topics.PaymentFailed };
+var neededTopics = new[] { Topics.PriceCalculated, Topics.RideStatusChanged, Topics.PaymentSucceeded, Topics.PaymentFailed, Topics.DriverAssigned, Topics.FindDriver, Topics.DriverFound };
 builder.Services.AddSingleton<IHostedService>(sp =>
     new TopicBootstrapper(sp.GetRequiredService<AdminClientConfig>(), neededTopics));
 

@@ -21,22 +21,22 @@ public class Ride {
     RideStatus rideStatus;
 
     public Ride() {
-        this.id = UUID.randomUUID();
+
     }
 
-    public Ride(Price price, Driver driver, int travelTime, Location origin, Passenger passenger, Location destination, RideStatus rideStatus) {
-        this.id = UUID.randomUUID();
-        this.price = price;
-        this.driver = driver;
-        this.travelTime = travelTime;
-        this.origin = origin;
-        this.passenger = passenger;
-        this.destination = destination;
-        this.rideStatus = rideStatus;
-    }
+//    public Ride(Price price, Driver driver, int travelTime, Location origin, Passenger passenger, Location destination, RideStatus rideStatus) {
+//        this.id = UUID.randomUUID();
+//        this.price = price;
+//        this.driver = driver;
+//        this.travelTime = travelTime;
+//        this.origin = origin;
+//        this.passenger = passenger;
+//        this.destination = destination;
+//        this.rideStatus = rideStatus;
+//    }
 
-    public Ride(Price price, Passenger passenger, Location origin, Location destination) {
-        this.id = UUID.randomUUID();
+    public Ride(UUID id, Price price, Passenger passenger, Location origin, Location destination) {
+        this.id = id;
         this.price = price;
         this.origin = origin;
         this.passenger = passenger;
