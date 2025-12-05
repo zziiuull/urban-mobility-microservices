@@ -33,8 +33,7 @@ public class PaymentService {
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
             kafkaTemplate.send("payment-success", new PaymentSuccessEvent(
-                    payment.getId(),
-                    payment.getCreatedAt(),
+                    params.rideId(),
                     payment.getChange()
             ));
         } else {

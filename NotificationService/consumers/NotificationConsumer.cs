@@ -21,7 +21,10 @@ public class NotificationConsumer(ConsumerConfig cfg, NotificationHub hub, ILogg
                     Topics.PriceCalculated,
                     Topics.RideStatusChanged,
                     Topics.PaymentSucceeded,
-                    Topics.PaymentFailed
+                    Topics.PaymentFailed,
+                    Topics.DriverAssigned,
+                    Topics.FindDriver,
+                    Topics.DriverFound
                 ]);
 
                 log.LogInformation("[NotificationConsumer] Kafka consumer inicializado.");

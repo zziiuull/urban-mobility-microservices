@@ -1,10 +1,8 @@
 package com.driverservice.presentation.controller;
 
-import com.driverservice.application.service.AcceptRideService;
 import com.driverservice.application.service.DriverLocationService;
 import com.driverservice.application.service.DriverService;
 import com.driverservice.application.service.params.CreateDriverParams;
-import com.driverservice.application.service.params.RideAcceptanceParams;
 import com.driverservice.application.service.params.UpdateDriverLocationParams;
 import com.driverservice.domain.entity.Driver;
 import com.driverservice.presentation.controller.requests.CreateDriverRequest;
@@ -22,12 +20,10 @@ import java.util.UUID;
 public class DriverController {
     private final DriverService driverService;
     private final DriverLocationService driverLocationService;
-    private final AcceptRideService acceptRideService;
 
-    public DriverController(DriverService driverService, DriverLocationService driverLocationService, AcceptRideService acceptRideService) {
+    public DriverController(DriverService driverService, DriverLocationService driverLocationService) {
         this.driverService = driverService;
         this.driverLocationService = driverLocationService;
-        this.acceptRideService = acceptRideService;
     }
 
     @PostMapping
@@ -60,13 +56,5 @@ public class DriverController {
 
         var response = new GetLocationResponse(location.latitude(), location.longitude());
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/{driverId}/accept")
-    public ResponseEntity<RideAcceptanceParams> acceptRide(@PathVariable UUID driverId, @RequestParam UUID rideId) {
-        RideAcceptanceParams params = new RideAcceptanceParams(rideId, driverId);
-        acceptRideService.accept(params);
-
-        return ResponseEntity.ok().build();
     }
 }

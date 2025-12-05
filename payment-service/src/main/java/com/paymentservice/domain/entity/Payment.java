@@ -4,7 +4,6 @@ import com.paymentservice.domain.vo.PaymentMethod;
 import com.paymentservice.domain.vo.PaymentStatus;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,7 +16,6 @@ public class Payment {
     private final BigDecimal change;
     private final PaymentStatus status;
     private final PaymentMethod method;
-    private final LocalDateTime createdAt;
 
     public Payment(
             UUID rideId,
@@ -32,7 +30,6 @@ public class Payment {
         this.amountPaid = amountPaid;
         this.totalAmount = totalAmount;
         this.method = method;
-        this.createdAt = LocalDateTime.now();
 
         if (amountPaid.compareTo(totalAmount) < 0) {
             this.status = PaymentStatus.FAILED;
@@ -51,8 +48,7 @@ public class Payment {
             BigDecimal totalAmount,
             BigDecimal change,
             PaymentStatus status,
-            PaymentMethod method,
-            LocalDateTime createdAt
+            PaymentMethod method
     ) {
         this.id = id;
         this.rideId = rideId;
@@ -62,7 +58,6 @@ public class Payment {
         this.change = change;
         this.status = status;
         this.method = method;
-        this.createdAt = createdAt;
     }
 
     @Override
@@ -106,9 +101,5 @@ public class Payment {
 
     public PaymentMethod getMethod() {
         return method;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }

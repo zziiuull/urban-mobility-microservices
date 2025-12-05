@@ -5,7 +5,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -20,12 +19,11 @@ public class PaymentEntity{
     private BigDecimal change;
     private String status;
     private String method;
-    private LocalDateTime createdAt;
 
     public PaymentEntity() {
     }
 
-    public PaymentEntity(UUID id, UUID rideId, UUID passengerId, BigDecimal amountPaid, BigDecimal totalAmount, BigDecimal change, String status, String method, LocalDateTime createdAt) {
+    public PaymentEntity(UUID id, UUID rideId, UUID passengerId, BigDecimal amountPaid, BigDecimal totalAmount, BigDecimal change, String status, String method) {
         this.id = id;
         this.rideId = rideId;
         this.passengerId = passengerId;
@@ -34,7 +32,6 @@ public class PaymentEntity{
         this.change = change;
         this.status = status;
         this.method = method;
-        this.createdAt = createdAt;
     }
 
     public UUID getId() {
@@ -99,13 +96,5 @@ public class PaymentEntity{
 
     public void setMethod(String method) {
         this.method = method;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

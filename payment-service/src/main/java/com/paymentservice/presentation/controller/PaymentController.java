@@ -18,8 +18,8 @@ public class PaymentController {
     }
 
     @PostMapping("/pay/{rideId}")
-    public ResponseEntity<Void> pay(@PathVariable UUID id, @RequestBody PayRequest request) {
-        var params = new PayParams(id, request.passengerId(), request.amountPaid(), request.totalToPay(), request.method());
+    public ResponseEntity<Void> pay(@PathVariable UUID rideId, @RequestBody PayRequest request) {
+        var params = new PayParams(rideId, request.passengerId(), request.amountPaid(), request.totalToPay(), request.method());
         paymentService.pay(params);
         return ResponseEntity.ok().build();
     }
