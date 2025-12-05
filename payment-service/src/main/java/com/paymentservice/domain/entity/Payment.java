@@ -48,7 +48,7 @@ public class Payment {
             BigDecimal totalAmount,
             BigDecimal change,
             PaymentStatus status,
-            PaymentMethod method,
+            PaymentMethod method
     ) {
         this.id = id;
         this.rideId = rideId;

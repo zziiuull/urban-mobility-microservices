@@ -39,7 +39,7 @@ public class PriceConsumer(ConsumerConfig cfg, PriceCalculator calc, CacheServic
                         cache);
 
                     var outEvt = new PriceCalculated(
-                        evt.RideId, amount, "BRL", surge, cacheHit, DateTime.UtcNow);
+                        evt.RideId, amount, "BRL", surge, cacheHit);
                     
                     await producer.PublishAsync(outEvt, outEvt.RideId, stoppingToken);
                 }

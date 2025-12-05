@@ -14,8 +14,7 @@ public class PaymentMapper {
                 payment.getTotalAmount(),
                 payment.getChange(),
                 payment.getStatus().name(),
-                payment.getMethod().name(),
-                payment.getCreatedAt()
+                payment.getMethod().name()
         );
     }
 
@@ -28,8 +27,7 @@ public class PaymentMapper {
                 entity.getTotalAmount(),
                 entity.getChange(),
                 PaymentStatus.valueOf(entity.getStatus()),
-                PaymentMethod.valueOf(entity.getMethod()),
-                entity.getCreatedAt()
+                PaymentMethod.valueOf(entity.getMethod())
         );
     }
 }
