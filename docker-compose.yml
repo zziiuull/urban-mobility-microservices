@@ -6,14 +6,27 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - backend
+    # depends_on:
+    #   - ride-service-1
+    #   - ride-service-2
+    #   - driver-service
+    #   - passenger-service
+    #   - payment-service
+    #   - price-service
+    #   - notification-service
+
+  ride-service-1:
+    build: ./ride-service
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
-      - ride-service
-      - driver-service
-      - passenger-service
+      - kafka
     networks:
       - backend
 
-  ride-service:
+  ride-service-2:
     build: ./ride-service
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
